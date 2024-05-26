@@ -1,5 +1,7 @@
 runtime: python39
 
+service: python-weather
+
 entrypoint: waitress-serve --port=$PORT server:app
 
 handlers:
