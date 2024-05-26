@@ -19,4 +19,4 @@ jobs:
         run: gcloud components install beta
 
       - name: Deploy to Google App Engine
-        run: gcloud app deploy
+        run: gcloud app deploy --verbosity=debug
