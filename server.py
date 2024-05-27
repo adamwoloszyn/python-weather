@@ -10,6 +10,18 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
+@app.route('/get_weather_response')
+def get_weather_response():
+    city = request.args.get('city')
+
+    #check for empty strings or string with only spaces
+    if not bool(city.strip()):
+        city = "Kansas City"
+
+    weather_data = get_current_weather(city)
+
+    return weather_data
+
 @app.route('/weather')
 def get_weather():
     city = request.args.get('city')
