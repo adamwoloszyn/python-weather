@@ -18,7 +18,9 @@ jobs:
       - name: Ensure browsers are installed
         run: python3 -m playwright install --with-deps
       - name: Start Flask app
-        run: nohup python -m flask run --host=0.0.0.0 & sleep 10
+        run: |
+          export FLASK_APP=app
+          nohup python -m flask run --host=0.0.0.0 & sleep 10
       - name: Run your tests
         run: pytest --tracing=retain-on-failure
       - uses: actions/upload-artifact@v4
