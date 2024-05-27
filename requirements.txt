@@ -20,6 +20,7 @@ pytest
 pytest-base-url
 pytest-playwright
 python-slugify
+python-dotenv
 requests
 text-unidecode
 tomli
