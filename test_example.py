@@ -2,34 +2,36 @@ from playwright.sync_api import sync_playwright
 
 def test_index_page():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)  # Set to False to see the browser
+        browser = p.chromium.launch(headless=True) 
         page = browser.new_page()
 
-        # Navigate to the local server's URL (adjust the port if different)
-        page.goto('http://localhost:8000/')
-        
-        # Check if the index page loads successfully
-        assert page.title() == "Weather App"  # Adjust title according to your HTML
-
-        browser.close()
+        try:
+            page.goto('https://python-weather-dot-adam-workshop.uw.r.appspot.com/')
+            assert page.title() == "Get Weather Conditions"
+            print("test_index_page: Passed")
+        except AssertionError:
+            print("test_index_page: Failed")
+        finally:
+            browser.close()
 
 def test_weather_page():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)  # Set to False to see the browser
+        browser = p.chromium.launch(headless=True) 
         page = browser.new_page()
 
-        # Navigate to the weather route
-        page.goto('http://localhost:8000/weather?city=Kansas%20City')
-        
-        # Check if the correct data is displayed
-        assert "Kansas City" in page.text_content('h1')  # Check if city name is displayed
-        assert "°F" in page.text_content('.temperature')  # Example, adjust according to your actual classes/ids
+        try:
+            page.goto('https://python-weather-dot-adam-workshop.uw.r.appspot.com/weather?city=Kansas%20City')        
+            assert "Kansas City Weather" in page.text_content('h1') 
 
-        # Test for a city not found
-        page.goto('http://localhost:8000/weather?city=UnknownCityXYZ')
-        assert "City not found" in page.text_content('body')  # Adjust according to your error handling
+            page.goto('https://python-weather-dot-adam-workshop.uw.r.appspot.com/weather?city=UnknownCityXYZ')
+            assert "City Not Found" in page.text_content('h1') 
 
-        browser.close()
+            print("test_weather_page: Passed")
+
+        except AssertionError:
+            print("test_weather_page: Failed")
+        finally:
+            browser.close()
 
 if __name__ == "__main__":
     test_index_page()

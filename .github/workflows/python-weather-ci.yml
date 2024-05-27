@@ -28,6 +28,7 @@ jobs:
           name: playwright-traces
           path: test-results/
   deploy-to-google-app-engine:
+    needs: playwright-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
