@@ -6,7 +6,7 @@ def test_index_page():
         page = browser.new_page()
 
         try:
-            page.goto('http://127.0.0.1:8000/')
+            page.goto('http://127.0.0.1:8000')
             assert page.title() == "Get Weather Conditions"
             print("test_index_page: Passed")
         except AssertionError:
@@ -20,7 +20,7 @@ def test_weather_page():
         page = browser.new_page()
 
         try:
-            page.goto('https//127.0.0.1:8000/weather?city=Kansas%20City')        
+            page.goto('http://127.0.0.1:8000/weather?city=Kansas%20City')        
             assert "Kansas City Weather" in page.text_content('h1') 
 
             page.goto('http://127.0.0.1:8000/weather?city=UnknownCityXYZ')
