@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request
+from flask_cors import CORS
 from weather import get_current_weather
 from waitress import serve
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 @app.route('/index')
