@@ -1,17 +1,36 @@
-import re
-from playwright.sync_api import Page, expect
+from playwright.sync_api import sync_playwright
 
-def test_has_title(page: Page):
-    page.goto("https://python-weather-dot-adam-workshop.uw.r.appspot.com/")
+def test_index_page():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)  # Set to False to see the browser
+        page = browser.new_page()
 
-    # Expect a title "to contain" a substring.
-    expect(page).to_have_title(re.compile("Get Weather Conditions"))
+        # Navigate to the local server's URL (adjust the port if different)
+        page.goto('http://localhost:8000/')
+        
+        # Check if the index page loads successfully
+        assert page.title() == "Weather App"  # Adjust title according to your HTML
 
-def test_get_started_link(page: Page):
-    page.goto("https://playwright.dev/")
+        browser.close()
 
-    # Click the get started link.
-    page.get_by_role("link", name="Get started").click()
+def test_weather_page():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)  # Set to False to see the browser
+        page = browser.new_page()
 
-    # Expects page to have a heading with the name of Installation.
-    expect(page.get_by_role("heading", name="Installation")).to_be_visible()
+        # Navigate to the weather route
+        page.goto('http://localhost:8000/weather?city=Kansas%20City')
+        
+        # Check if the correct data is displayed
+        assert "Kansas City" in page.text_content('h1')  # Check if city name is displayed
+        assert "°F" in page.text_content('.temperature')  # Example, adjust according to your actual classes/ids
+
+        # Test for a city not found
+        page.goto('http://localhost:8000/weather?city=UnknownCityXYZ')
+        assert "City not found" in page.text_content('body')  # Adjust according to your error handling
+
+        browser.close()
+
+if __name__ == "__main__":
+    test_index_page()
+    test_weather_page()
